@@ -3,6 +3,7 @@ package com.github.automatedowl.tools;
 import com.google.common.collect.ImmutableMap;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -15,13 +16,13 @@ import java.io.File;
 
 public class AllureEnvironmentWriter {
 
-    public static void allureEnvironmentWriter(ImmutableMap<String, String> environmentValuesSet)  {
+    public static void allureEnvironmentWriter(ImmutableMap<String, String> environmentValuesSet) {
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             Document doc = docBuilder.newDocument();
             Element environment = doc.createElement("environment");
-            doc.appendChild(environment);
+
             environmentValuesSet.forEach((k, v) -> {
                 Element parameter = doc.createElement("parameter");
                 Element key = doc.createElement("key");
@@ -37,12 +38,13 @@ public class AllureEnvironmentWriter {
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
-            File allureResultsDir = new File( System.getProperty("user.dir")
-                    + "/target/allure-results");
+            File allureResultsDir = new File(System.getProperty("user.dir"), "/target/allure-results");
+
             if (!allureResultsDir.exists()) allureResultsDir.mkdirs();
+
             StreamResult result = new StreamResult(
-                    new File( System.getProperty("user.dir")
-                            + "/target/allure-results/environment.xml"));
+                    new File(System.getProperty("user.dir"), "/target/allure-results/environment.xml"));
+
             transformer.transform(source, result);
             System.out.println("Allure environment data saved.");
         } catch (ParserConfigurationException pce) {
@@ -54,12 +56,13 @@ public class AllureEnvironmentWriter {
 
 
     public static void allureEnvironmentWriter(ImmutableMap<String, String> environmentValuesSet,
-                                               String customResultsPath)  {
+                                               String customResultsPath) {
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             Document doc = docBuilder.newDocument();
             Element environment = doc.createElement("environment");
+
             doc.appendChild(environment);
             environmentValuesSet.forEach((k, v) -> {
                 Element parameter = doc.createElement("parameter");
@@ -77,9 +80,11 @@ public class AllureEnvironmentWriter {
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
             File allureResultsDir = new File(customResultsPath);
+
             if (!allureResultsDir.exists()) allureResultsDir.mkdirs();
-            StreamResult result = new StreamResult(
-                    new File( customResultsPath + "environment.xml"));
+
+            StreamResult result = new StreamResult(new File(customResultsPath, "environment.xml"));
+
             transformer.transform(source, result);
             System.out.println("Allure environment data saved.");
         } catch (ParserConfigurationException pce) {
